@@ -18,12 +18,12 @@ export const App = () => {
 
   return (
     <>
-    <GlobalStyle />
-        <RouterProvider router={router}>
-          {isFetchingSession && <Spin spinning size="large" fullscreen />}
-          Hello
-          <Routing />
-        </RouterProvider>
+      <GlobalStyle />
+      <RouterProvider router={router}>
+        {isFetchingSession && <Spin spinning size="large" fullscreen />}
+        Hello
+        <Routing />
+      </RouterProvider>
     </>
   );
 };
