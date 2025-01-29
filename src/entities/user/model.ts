@@ -13,7 +13,7 @@ export enum SessionStatus {
   UnAuthorized,
 }
 
-const loggedIn = createEvent();
+const loggedIn = createEvent<User>();
 const loggedOut = createEvent();
 
 export const $session = createStore(SessionStatus.Initial);
@@ -29,12 +29,12 @@ export const sessionStatus = reshape({
 
 export const $user = createStore<User | null>(null);
 
-export const sessionFx = createEffect(() => api.user.findMe());
+export const sessionFx = createEffect(() => api.user.getProfile());
 
 const authorized = sessionFx.doneData;
 const notAuthorized = sessionFx.failData;
 
-$session.reset([loggedOut, loggedIn]);
+$session.reset([loggedOut]);
 $user.on(sessionFx.doneData, (_, response) => response.data).reset([loggedOut]);
 
 sample({
@@ -53,6 +53,17 @@ sample({
 sample({
   clock: notAuthorized,
   fn: () => SessionStatus.UnAuthorized,
+  target: $session,
+});
+
+sample({
+  clock: loggedIn,
+  target: $user,
+});
+
+sample({
+  clock: loggedIn,
+  fn: () => SessionStatus.Authorized,
   target: $session,
 });
 
@@ -76,8 +87,8 @@ export const chainAuthorized = <Params extends RouteParams>({ route, otherwise }
 
   sample({
     clock: authCheckDone,
-    roleAndAuthCheckDone,
-  })
+    target: roleAndAuthCheckDone,
+  });
 
   sample({
     clock: authCheckStarted,

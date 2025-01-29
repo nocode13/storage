@@ -2,6 +2,10 @@ import { createHistoryRouter, createRoute, createRouterControls } from 'atomic-r
 
 export const routes = {
   browse: createRoute(),
+  categories: {
+    root: createRoute(),
+    category: createRoute<{ id: string }>(),
+  },
 
   auth: createRoute(),
   logOut: createRoute(),
@@ -26,6 +30,14 @@ export const routesMap = [
   {
     route: routes.forbidden,
     path: '/forbidden',
+  },
+  {
+    route: routes.categories.root,
+    path: '/categories',
+  },
+  {
+    route: routes.categories.category,
+    path: 'categories/:id',
   },
 ];
 
