@@ -1,21 +1,19 @@
 import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
-  html, body {
+  html {
+    min-height: 100dvh;
     height: 100%;
   }
 
   body {
-    display: flex;
-    flex-direction: column;
     padding: 0;
     margin: 0;
     font-family: 'Inter Variable', sans-serif;
+    height: inherit;
   }
 
   #root {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+    height: inherit;
   }
 `;

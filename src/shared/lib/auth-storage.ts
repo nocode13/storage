@@ -1,9 +1,5 @@
 import { User } from '~/shared/api/types';
-import {
-  ACCESS_TOKEN_KEY,
-  REFRESH_TOKEN_KEY,
-  USER_KEY,
-} from '~/shared/config/local-storage';
+import { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY, USER_KEY } from '~/shared/config/local-storage';
 import { getParsedItem, setItemSafely } from '~/shared/lib/local-storage';
 
 class AuthStorageService {
