@@ -1,5 +1,8 @@
 import { attach, createStore, sample } from 'effector';
+import { spread } from 'patronum';
 import { userModel } from '~/entities/user';
+import { createEditProductModel } from '~/features/product/create-edit';
+import { deleteProductModel } from '~/features/product/delete';
 import { api } from '~/shared/api';
 import { Product } from '~/shared/api/types/product';
 import { DEFAULT_PER_PAGE } from '~/shared/config/api';
@@ -23,14 +26,27 @@ export const factory = ({ route }: LazyPageFactoryParams) => {
   const $pending = fetchProductsFx.pending;
 
   sample({
-    clock: [authorizedRoute.opened, paginationModel.pageChanged],
+    clock: [
+      authorizedRoute.opened,
+      paginationModel.pageChanged,
+      createEditProductModel.mutated,
+      deleteProductModel.mutated,
+    ],
     target: fetchProductsFx,
   });
 
   sample({
     clock: fetchProductsFx.doneData,
-    fn: (response) => response.data.data,
-    target: $products,
+    fn: (response) => ({
+      products: response.data.data,
+      total: response.data.total,
+    }),
+    target: spread({
+      targets: {
+        products: $products,
+        total: paginationModel.$total,
+      },
+    }),
   });
 
   return { authorizedRoute, $pending, $products, paginationModel };

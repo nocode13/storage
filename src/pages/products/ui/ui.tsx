@@ -4,25 +4,39 @@ import { factory } from '../model';
 import { Button, Flex, Table, TableProps, theme, Typography } from 'antd';
 import { useUnit } from 'effector-react';
 import { Product } from '~/shared/api/types/product';
-import { EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { PAGE_SIZE_STEP } from '~/shared/config/api';
 import { CreateEditProduct, createEditProductModel } from '~/features/product/create-edit';
+import { productConfig } from '~/entities/product';
+import { DeleteProductModal, deleteProductModel } from '~/features/product/delete';
 
 type Model = ReturnType<typeof factory>;
 type Props = LazyPageProps<Model>;
 
 const useColumns = (): TableProps<Product>['columns'] => {
+  const { token } = theme.useToken();
   return [
     {
       title: 'Название',
       dataIndex: 'name',
     },
     {
+      title: 'Тип',
+      dataIndex: 'type',
+      render: (type: Product['type']) => productConfig.productTypeOptions[type].label,
+    },
+    {
       title: '',
       width: '100px',
       render: (_, product) => (
-        <Flex>
+        <Flex gap={token.marginXS} justify="end">
           <Button size="small" icon={<EditOutlined />} onClick={() => createEditProductModel.editTriggered(product)} />
+          <Button
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => deleteProductModel.deleteTriggered(product)}
+          />
         </Flex>
       ),
     },
@@ -63,6 +77,7 @@ const ProductsPage = ({ model }: Props) => {
           }
         }
       />
+      <DeleteProductModal />
     </Flex>
   );
 };
