@@ -8,7 +8,7 @@ export const factory = ({ route }: LazyPageFactoryParams) => {
 
   redirect({
     clock: authorizedRoute.opened,
-    route: routes.categories.root,
+    route: routes.categories,
   });
 
   return { authorizedRoute };

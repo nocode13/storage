@@ -5,14 +5,14 @@ import { Layout } from '~/widgets/layout';
 
 const load = () => import('./ui');
 
-const route = routes.categories;
+const route = routes.products;
 
 const Page = createLazyPage({
   route,
   load,
 });
 
-export const Categories = {
+export const Products = {
   route,
   view: withSuspense(Page),
   layout: Layout,

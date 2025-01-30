@@ -5,7 +5,7 @@ import { CreateCategoryBody, EditCategoryBody } from './types/api/category';
 
 export const category = {
   getList: (config?: AxiosRequestConfig) => {
-    return baseInstance.get<{ data: Category[] }>('/api/v1/category', config);
+    return baseInstance.get<{ data: Category[]; total: number }>('/api/v1/category', config);
   },
   create: (body: CreateCategoryBody, config?: AxiosRequestConfig) => {
     return baseInstance.post('/api/v1/category', body, config);
