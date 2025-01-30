@@ -25,7 +25,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["dmg"],
+    "targets": ["dmg", "nsis"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -39,6 +39,11 @@
       "signingIdentity": null,
       "entitlements": null,
       "exceptionDomain": ""
+    },
+    "windows": {
+      "wix": {
+        "language": "en-US"
+      }
     }
   },
   "plugins": {}
