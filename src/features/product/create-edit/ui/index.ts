@@ -1,0 +1,1 @@
+export { CreateEditProduct } from './ui';

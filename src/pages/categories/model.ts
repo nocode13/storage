@@ -1,4 +1,5 @@
 import { attach, createStore, sample } from 'effector';
+import { spread } from 'patronum';
 import { userModel } from '~/entities/user';
 import { createEditCategoryModel } from '~/features/category/create-edit';
 import { deleteCategoryModel } from '~/features/category/delete';
@@ -11,7 +12,7 @@ import { createPagination } from '~/shared/lib/pagination';
 export const factory = ({ route }: LazyPageFactoryParams) => {
   const authorizedRoute = userModel.chainAuthorized({ route });
 
-  const paginationModel = createPagination({ reset: [] });
+  const paginationModel = createPagination({ reset: [authorizedRoute.closed] });
   const $categories = createStore<Category[]>([]);
 
   const fetchCategoriesFx = attach({
@@ -36,8 +37,16 @@ export const factory = ({ route }: LazyPageFactoryParams) => {
 
   sample({
     clock: fetchCategoriesFx.doneData,
-    fn: (response) => response.data.data,
-    target: $categories,
+    fn: (response) => ({
+      categories: response.data.data,
+      total: response.data.total,
+    }),
+    target: spread({
+      targets: {
+        categories: $categories,
+        total: paginationModel.$total,
+      },
+    }),
   });
 
   sample({
@@ -45,5 +54,5 @@ export const factory = ({ route }: LazyPageFactoryParams) => {
     target: $categories.reinit,
   });
 
-  return { authorizedRoute, $categories, $pending };
+  return { authorizedRoute, $categories, $pending, paginationModel };
 };
